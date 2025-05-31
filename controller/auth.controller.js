@@ -4,6 +4,7 @@ const { generateToken } = require('../utils/token');
 
 exports.register = async (req, res) => {
   const { name, email, password } = req.body;
+  console.log("name=", name);
   const hashed = await hashPassword(password);
 
   try {
