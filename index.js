@@ -2,7 +2,6 @@ const express = require('express');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
-const path=require('path');
 const cors = require('cors');
 
 dotenv.config();
@@ -17,16 +16,11 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
-// React frontend statik fayllar
-app.use(express.static(path.join(__dirname, 'client', 'build')));
-
-// React routing uchun barcha so‘rovlarni index.html ga yo‘naltiramiz
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
-});
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, (res) => {
   console.log(`✅ Server http://localhost:${PORT} is running`, res);
 });
+app.get('/', (req, res) => {
+  res.send('Itransition Task4')
+})
