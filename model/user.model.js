@@ -6,6 +6,7 @@ const User = {
     console.log("Email =", email);
     try {
       // note the array around email
+      createtable()
       const [rows] = await db.query(
         'SELECT * FROM users WHERE email = ?',
         [email]
@@ -31,7 +32,8 @@ const User = {
       blocked BOOLEAN DEFAULT FALSE
     )`;
     try {
-      await db.query(createUsersTable);
+      // await db.query(createUsersTable);
+      createtable()
       const [result] = await db.query('INSERT INTO users SET?', data, cb);
 
       cb(null, result);
@@ -126,4 +128,27 @@ const User = {
   },
 
 };
+
+async function createtable() {
+
+  const createUsersTable = `
+  CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    last_login DATETIME DEFAULT NULL,
+    created_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    blocked BOOLEAN DEFAULT FALSE
+  )`;
+
+  try {
+    await db.query(createUsersTable);
+    console.log("Table created or already exists");
+  } catch (err) {
+    console.error("error", err);
+  }
+}
+
+
 module.exports = User;
